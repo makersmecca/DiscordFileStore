@@ -1,68 +1,53 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
-function DiscordImageSender() {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [webhookUrl, setWebhookUrl] = useState("");
-  const [status, setStatus] = useState("");
+const ImageBot = () => {
+  const [imageFile, setImageFile] = useState(null);
+  const [statusMessage, setStatusMessage] = useState("");
+  const webhookUrl = import.meta.env.VITE_WEBHOOK_URL;
 
-  const handleFileChange = (event) => {
-    setSelectedFile(event.target.files[0]);
+  const handleImageChange = (e) => {
+    console.log(e);
+    if (e.target.files[0]) {
+      setImageFile(e.target.files[0]);
+    }
   };
 
-  const handleWebhookChange = (event) => {
-    setWebhookUrl(event.target.value);
-  };
-
-  const sendImage = async () => {
-    if (!selectedFile || !webhookUrl) {
-      setStatus("Please select a file and enter webhook URL");
+  const handleUpload = async () => {
+    if (!imageFile) {
+      setStatusMessage("Please select an image file first.");
       return;
     }
 
+    const formData = new FormData();
+    formData.append("file", imageFile);
+    formData.append(
+      "payload_json",
+      JSON.stringify({ content: "Here is an image!" })
+    );
+
     try {
-      const formData = new FormData();
-      formData.append("file", selectedFile);
-
-      const response = await fetch(webhookUrl, {
-        method: "POST",
-        body: formData,
+      setStatusMessage("Uploading...");
+      await axios.post(webhookUrl, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       });
-
-      if (response.ok) {
-        setStatus("Image sent successfully!");
-        setSelectedFile(null);
-      } else {
-        setStatus("Failed to send image");
-      }
+      setStatusMessage("Image uploaded successfully!");
     } catch (error) {
-      setStatus("Error: " + error.message);
+      console.error("Error uploading image:", error);
+      setStatusMessage("Failed to upload the image. Please try again.");
     }
   };
 
   return (
-    <div className="discord-sender">
-      <h2>Discord Image Sender</h2>
-
-      <div>
-        <input
-          type="text"
-          placeholder="Enter Discord Webhook URL"
-          onChange={handleWebhookChange}
-          value={webhookUrl}
-        />
-      </div>
-
-      <div>
-        <input type="file" accept="image/*" onChange={handleFileChange} />
-      </div>
-
-      <button onClick={sendImage} disabled={!selectedFile || !webhookUrl}>
-        Send Image
-      </button>
-
-      {status && <p>{status}</p>}
+    <div className="image-uploader">
+      <h1>Upload an Image to Discord</h1>
+      <input type="file" accept="image/*" onChange={handleImageChange} />
+      <button onClick={handleUpload}>Upload</button>
+      <p>{statusMessage}</p>
     </div>
   );
-}
+};
 
-export default DiscordImageSender;
+export default ImageBot;
