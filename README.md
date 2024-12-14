@@ -1,1 +1,1 @@
-# Discord Image Store
+# Discord File Storage
