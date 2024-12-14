@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "../Styles/toggle.css";
+import "../Styles/file.css";
 
 const DiscordFileUploader = () => {
   const [file, setFile] = useState(null);
@@ -69,15 +71,39 @@ const DiscordFileUploader = () => {
   return (
     <div className="file-uploader">
       <h1>Upload File to Discord</h1>
-      <input type="file" onChange={handleFileChange} />
-      <button onClick={handleUpload} disabled={!file || !webhookUrl}>
-        Upload File
-      </button>
+      <div className="file-input-wrapper">
+        <label className="custom-file-input">
+          <span className="file-input-button">Choose File</span>
+          <span className="file-name">
+            {file ? file.name : "No file selected"}
+          </span>
+          <input
+            type="file"
+            onChange={handleFileChange}
+            className="hidden-file-input"
+          />
+        </label>
+        <button onClick={handleUpload} disabled={!file || !webhookUrl}>
+          Upload File
+        </button>
+      </div>
+
+      {/* <input type="file" onChange={handleFileChange} /> */}
+
       <p>{statusMessage}</p>
-      <div>
-        <input id="toggle" type="checkbox" onChange={handleToggle} />
-        <label htmlFor="toggle">
-          {nitro ? "Nitro User" : "Non-Nitro User"}
+
+      <div className="toggle-container">
+        <div className="toggle-switch">
+          <input
+            id="toggle"
+            type="checkbox"
+            checked={nitro}
+            onChange={handleToggle}
+          />
+          <span className="slider"></span>
+        </div>
+        <label htmlFor="toggle" className="toggle-label">
+          <h2>{nitro ? "Nitro User" : "Non-Nitro User"}</h2>
         </label>
       </div>
     </div>
