@@ -1,9 +1,11 @@
 .file-input-wrapper {
-  margin: 20px 0;
+  margin-top: 80px;
+  margin-left: 20px;
+  margin-right: 20px;
   display: flex;
-  /* justify-self: center; */
   justify-content: space-evenly;
   align-items: center;
+  flex-wrap: wrap; /* Ensures wrapping for smaller screens */
 }
 
 .custom-file-input {
@@ -29,6 +31,7 @@
 .file-name {
   color: #72767d;
   font-size: 14px;
+  text-align: center; /* Center-align text for better appearance on smaller screens */
 }
 
 .hidden-file-input {
@@ -38,4 +41,45 @@
   opacity: 0;
   overflow: hidden;
   z-index: -1;
+}
+
+/* Media Queries for Responsiveness */
+
+/* For screens smaller than 768px (e.g., tablets and small devices) */
+@media (max-width: 768px) {
+  .file-input-wrapper {
+    margin-top: 500px;
+    flex-direction: column; /* Stacks items vertically */
+    gap: 15px;
+  }
+
+  .file-input-button {
+    width: 100%; /* Makes the button take full width */
+    text-align: center; /* Ensures centered text */
+  }
+
+  .custom-file-input {
+    flex-direction: column; /* Stack file input and name */
+    gap: 5px;
+  }
+
+  .file-name {
+    font-size: 12px; /* Slightly smaller font for compactness */
+  }
+}
+
+/* For screens smaller than 480px (e.g., mobile devices) */
+@media (max-width: 480px) {
+  .file-input-wrapper {
+    margin: 10px 0; /* Reduce margin for smaller screens */
+  }
+
+  .file-input-button {
+    padding: 8px 16px; /* Compact padding for smaller screens */
+    font-size: 12px;
+  }
+
+  .file-name {
+    font-size: 11px; /* Further reduce font size */
+  }
 }

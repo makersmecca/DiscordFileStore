@@ -1,14 +1,51 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "../Styles/toggle.css";
 import "../Styles/file.css";
+import "../Styles/input.css";
+
+const getWebhookInfo = async (webhookUrl) => {
+  try {
+    const response = await axios.get(webhookUrl);
+    console.log(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching webhook info:", error);
+    return null;
+  }
+};
 
 const DiscordFileUploader = () => {
   const [file, setFile] = useState(null);
   const [statusMessage, setStatusMessage] = useState("");
   const [nitro, setNitro] = useState(false);
   const [maxFileSize, setMaxFileSize] = useState(25 * 1024 * 1024);
-  const webhookUrl = import.meta.env.VITE_WEBHOOK_URL;
+  const [webhookUrl, setWebhookUrl] = useState(
+    localStorage.getItem("webhookurl") || ""
+  );
+  const [inputURL, setInputURL] = useState("");
+  //   const webhookUrl = import.meta.env.VITE_WEBHOOK_URL;
+
+  const [serverInfo, setServerInfo] = useState({
+    guildName: "",
+    channelName: "",
+  });
+
+  useEffect(() => {
+    const fetchWebhookInfo = async () => {
+      if (webhookUrl) {
+        const info = await getWebhookInfo(webhookUrl);
+        if (info) {
+          setServerInfo({
+            guildName: info.guild_id,
+            channelName: info.channel_id,
+          });
+        }
+      }
+    };
+
+    fetchWebhookInfo();
+  }, [webhookUrl]);
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -68,9 +105,25 @@ const DiscordFileUploader = () => {
     setNitro((prevState) => !prevState);
   };
 
+  const handleChangeWebhook = (e) => {
+    e.preventDefault();
+    setInputURL(e.target.value);
+  };
+  const handleSubmitWebHook = (e) => {
+    e.preventDefault();
+    localStorage.setItem("webhookurl", inputURL);
+    setWebhookUrl(inputURL);
+    setInputURL("");
+  };
+
   return (
     <div className="file-uploader">
       <h1>Upload File to Discord</h1>
+      <p>
+        {serverInfo.guildName === ""
+          ? "Server Not Set"
+          : `Server//${serverInfo.guildName}`}
+      </p>
       <div className="file-input-wrapper">
         <label className="custom-file-input">
           <span className="file-input-button">Choose File</span>
@@ -88,21 +141,36 @@ const DiscordFileUploader = () => {
         </button>
       </div>
 
-      {/* <input type="file" onChange={handleFileChange} /> */}
-
       <p>{statusMessage}</p>
 
+      <div className="webhook-container">
+        <input
+          type="text"
+          className="webhook-input"
+          placeholder={`${webhookUrl ? webhookUrl : "Your Webhook URL"}`}
+          onChange={handleChangeWebhook}
+          value={inputURL}
+        />
+        <button
+          type="button"
+          className="webhook-button"
+          onClick={handleSubmitWebHook}
+        >
+          {webhookUrl ? "Update" : "Set"}
+        </button>
+      </div>
+
       <div className="toggle-container">
-        <div className="toggle-switch">
+        <label className="toggle-switch">
           <input
-            id="toggle"
+            id="toggleSwitch"
             type="checkbox"
             checked={nitro}
             onChange={handleToggle}
           />
           <span className="slider"></span>
-        </div>
-        <label htmlFor="toggle" className="toggle-label">
+        </label>
+        <label htmlFor="toggleSwitch" className="toggle-label">
           <h2>{nitro ? "Nitro User" : "Non-Nitro User"}</h2>
         </label>
       </div>
