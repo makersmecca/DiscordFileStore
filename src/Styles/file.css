@@ -43,6 +43,11 @@
   z-index: -1;
 }
 
+.file-list {
+  text-align: left;
+  justify-self: left;
+}
+
 /* Media Queries for Responsiveness */
 
 /* For screens smaller than 768px (e.g., tablets and small devices) */
@@ -70,6 +75,10 @@
 
 /* For screens smaller than 480px (e.g., mobile devices) */
 @media (max-width: 480px) {
+  .file-list {
+    text-align: left;
+    justify-self: center;
+  }
   .file-input-wrapper {
     margin: 10px 0; /* Reduce margin for smaller screens */
   }

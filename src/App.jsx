@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ImageBot from "./Components/ImageBot";
+import FileBot from "./Components/FileBot";
 import "./App.css";
 
 function App() {
@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-      <ImageBot />
+      <FileBot />
     </>
   );
 }
