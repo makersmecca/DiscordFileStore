@@ -1,5 +1,11 @@
 # Discord File Storage
 
+## Prerequisites:
+
+- Create a text channel in discord
+- Navigate to Edit Channel > Integrations > Webhooks > New Webhook
+- Click on the newly created Webhook > Copy Webhook URL
+
 <strong>To run this project locally, follow these steps:</strong>
 
 <ol>
@@ -28,4 +34,7 @@ npm run dev
 
   <li>Open on browser</li><pre>Go to "http://localhost:5173"</pre>
 </ol>
-You should be able to see the tool up and running on your browser.
+
+### You should be able to see the tool up and running on your browser.
+
+### Paste Webhook URL and you're all set!
