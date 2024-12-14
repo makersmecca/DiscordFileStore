@@ -1,0 +1,53 @@
+.webhook-container {
+  margin-top: 50px;
+  display: flex;
+  gap: 20px;
+  justify-content: space-evenly;
+}
+
+.webhook-input {
+  flex: 1;
+  padding: 8px 12px;
+  border: 0px;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+  min-width: 200px; /* Ensures the input has a minimum width */
+}
+
+.webhook-input:focus {
+  outline: none;
+  border: 1px;
+  border-color: #007bff;
+}
+
+.webhook-button {
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+  min-width: 120px; /* Ensures the button has a minimum width */
+}
+
+.webhook-button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 480px) {
+  .webhook-container {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    gap: 12px; /* Adds spacing between the stacked elements */
+  }
+
+  .webhook-input {
+    width: 80%;
+    min-width: 0; /* Removes the min-width limitation */
+  }
+
+  .webhook-button {
+    margin-top: 10px;
+  }
+}
