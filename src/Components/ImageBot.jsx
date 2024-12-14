@@ -4,18 +4,22 @@ import axios from "axios";
 const DiscordFileUploader = () => {
   const [file, setFile] = useState(null);
   const [statusMessage, setStatusMessage] = useState("");
+  const [nitro, setNitro] = useState(false);
+  const [maxFileSize, setMaxFileSize] = useState(25 * 1024 * 1024);
   const webhookUrl = import.meta.env.VITE_WEBHOOK_URL;
 
   const handleFileChange = (event) => {
     const selectedFile = event.target.files[0];
     console.log(selectedFile.name);
 
-    // Validate file size (Discord limit: 25MB)
-    if (selectedFile && selectedFile.size <= 25 * 1024 * 1024) {
+    // Validate file size
+    nitro ? setMaxFileSize(50 * 1024 * 1024) : setMaxFileSize(25 * 1024 * 1024);
+
+    if (selectedFile && selectedFile.size <= maxFileSize) {
       setFile(selectedFile);
       setStatusMessage(`Selected file: ${selectedFile.name}`);
     } else {
-      setStatusMessage("File size exceeds the 25MB limit.");
+      setStatusMessage("Uh Oh! File size exceeds the 25MB limit.");
       setFile(null);
     }
   };
@@ -31,7 +35,7 @@ const DiscordFileUploader = () => {
       const formData = new FormData();
       formData.append("file", file);
 
-      // Optional: Add a message with the file upload
+      //Adding a message with the file upload
       formData.append(
         "payload_json",
         JSON.stringify({ content: `File: ${file.name}` })
@@ -58,6 +62,10 @@ const DiscordFileUploader = () => {
     }
   };
 
+  const handleToggle = () => {
+    setNitro((prevState) => !prevState);
+  };
+
   return (
     <div className="file-uploader">
       <h1>Upload File to Discord</h1>
@@ -66,6 +74,12 @@ const DiscordFileUploader = () => {
         Upload File
       </button>
       <p>{statusMessage}</p>
+      <div>
+        <input id="toggle" type="checkbox" onChange={handleToggle} />
+        <label htmlFor="toggle">
+          {nitro ? "Nitro User" : "Non-Nitro User"}
+        </label>
+      </div>
     </div>
   );
 };
